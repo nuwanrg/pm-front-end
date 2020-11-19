@@ -6,6 +6,7 @@ import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 import Link from "@material-ui/core/Link";
 
+
 const required = value => {
   if (!value) {
     return (
@@ -118,6 +119,7 @@ export default class Login extends Component {
                 onChange={this.onChangePassword}
                 validations={[required]}
               />
+              <Link href="/resetPassword" variant="body2">Forgot password?</Link>
             </div>
 
             <div className="form-group">

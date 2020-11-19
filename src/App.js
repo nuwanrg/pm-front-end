@@ -13,6 +13,7 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import ResetPassword from "./components/resetPassword"
 
 class App extends Component {
   constructor(props) {
@@ -51,17 +52,61 @@ class App extends Component {
           <Link to={"/"} className="navbar-brand">
             PropertyMonkey
           </Link>
+
           <div className="navbar-nav mr-auto">
+
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
               </Link>
             </li>
+
             <li className="nav-item">
               <Link to={"/properties"} className="nav-link">
-                Properties
+                Buy
               </Link>
             </li>
+
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                Rent
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                Apartments
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                Houses
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                New Projects
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                Find Agent
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                News
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to={"/properties"} className="nav-link">
+                More
+              </Link>
+            </li>
+
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -127,6 +172,7 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/resetPassword" component={ResetPassword} />
           </Switch>
         </div>
       </div>
