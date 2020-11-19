@@ -7,29 +7,31 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
+      list: [
+      {id:"",
       title: "Title test",
       price: "",
       category: "",
-      errorMsg:""
+      errorMsg:""},
+      ]
     };
   }
+
 
   componentDidMount() {
     PropertyService.getPublicContent().then(
       response => {
-        this.setState({
-          category: response.data.category,
-          title: response.data.title
-        });
-      },
-      error => {
-        this.setState({
-          errorMsg:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString()
-        });
+        this.setState({ list: response.data });
       }
+      // ,
+      // error => {
+      //   this.setState({
+      //     errorMsg:
+      //       (error.response && error.response.data) ||
+      //       error.message ||
+      //       error.toString()
+      //   });
+      // }
     );
   }
 
@@ -37,11 +39,28 @@ export default class Home extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>{this.state.title}</h3>
-          <h3>{this.state.errorMsg}</h3>
-          
-        </header>
+          <h3>Properties</h3>
+          </header>
+
+          <div>
+        <ul>
+          {this.state.list.map(item => (
+            <li key={item.id}>
+              {item.title} 
+              <button
+                type="button"
+                onClick={() => this.onRemoveItem(item.id)}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      </div>
+
+      
     );
   }
 }
