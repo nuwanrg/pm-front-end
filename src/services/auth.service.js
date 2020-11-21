@@ -35,6 +35,13 @@ class AuthService {
     });
   }
 
+  changePassword(token, password) {
+    return axios.post(API_URL + "savePassword", {
+      token,
+      password
+    });
+  }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }

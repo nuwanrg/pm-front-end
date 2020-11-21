@@ -11,6 +11,7 @@ export default class BoardAdmin extends Component {
     };
   }
 
+  
   componentDidMount() {
     UserService.getAdminBoard().then(
       response => {
