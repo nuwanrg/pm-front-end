@@ -15,6 +15,7 @@ import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import ResetPassword from "./components/resetPassword"
 import ChangePassword from "./components/changePassword"
+import LandingPageComponent from "./components/landingPage/landingpageComponent";
 
 class App extends Component {
   constructor(props) {
@@ -165,7 +166,7 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path={["/", "/home"]} component={LandingPageComponent} />
             <Route exact path={["/", "/properties"]} component={Properties} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
