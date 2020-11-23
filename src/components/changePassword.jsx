@@ -16,8 +16,6 @@ const required = value => {
   }
 };
 
-
-
 const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
@@ -40,10 +38,11 @@ export default class ChangePassword extends Component {
       newPassword:"",
       successful: false,
       message: "",
-      token:this.props.match.token
+      token:this.props.match.params.token
     };
   }
 
+  
 
   onChangePassword(e) {
     this.setState({
@@ -57,8 +56,9 @@ export default class ChangePassword extends Component {
     });
   }
 
- /* componentDidMount() {
-    this.setState({
+  componentDidMount() {
+    console.log(this.props);
+    /*this.setState({
       token:"4fa12490-eb9f-47ca-9526-26a5934b9bbe", //TODO 
       message: "response.data.message",
       successful: false
@@ -78,8 +78,8 @@ export default class ChangePassword extends Component {
             error.toString()
         });
       }
-    ;
-  }*/
+    ;*/
+  }
 
   handleChangePassword(e) {
     e.preventDefault();

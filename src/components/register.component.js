@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import Link from "@material-ui/core/Link";
 
 import AuthService from "../services/auth.service";
 
@@ -53,6 +54,7 @@ export default class Register extends Component {
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
 
     this.state = {
       username: "",
@@ -78,6 +80,11 @@ export default class Register extends Component {
   onChangePassword(e) {
     this.setState({
       password: e.target.value
+    });
+  }
+  onChangeConfirmPassword(e) {
+    this.setState({
+      confirmPassword: e.target.value
     });
   }
 
@@ -173,6 +180,17 @@ export default class Register extends Component {
                     validations={[required, vpassword]}
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <Input
+                    type="password"
+                    className="form-control"
+                    name="confirmPassword"
+                    value={this.state.confirmPassword}
+                    onChange={this.onChangeConfirmPassword}
+                    validations={[required, vpassword]}
+                  />
+                </div>
 
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>
@@ -191,6 +209,11 @@ export default class Register extends Component {
                   role="alert"
                 >
                   {this.state.message}
+                </div>
+                <div>
+                <Link href="/login" variant="body2">
+                                     Login
+                                </Link>
                 </div>
               </div>
             )}

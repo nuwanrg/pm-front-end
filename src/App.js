@@ -13,8 +13,8 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
-import ResetPassword from "./components/resetPassword"
-import ChangePassword from "./components/changePassword"
+import ResetPassword from "./components/ResetPassword"
+import ChangePassword from "./components/ChangePassword"
 
 class App extends Component {
   constructor(props) {
@@ -174,7 +174,7 @@ class App extends Component {
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/resetPassword" component={ResetPassword} />
-            <Route path="/changePassword" component={ChangePassword} />
+            <Route path="/changePassword/:token" component={ChangePassword} />
             
           </Switch>
         </div>
