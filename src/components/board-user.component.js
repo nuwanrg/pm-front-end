@@ -1,43 +1,59 @@
 import React, { Component } from "react";
-
-import UserService from "../services/user.service";
-
+import Table from "react-bootstrap/Table";
+import axios from "axios";
+import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 export default class BoardUser extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    posts: [],
+  };
 
-    this.state = {
-      content: ""
-    };
-  }
-
-  componentDidMount() {
-    UserService.getUserBoard().then(
-      response => {
-        this.setState({
-          content: response.data
-        });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
+  async componentDidMount() {
+    const { data: posts } = await axios.get(
+      "http://localhost:8082/property/all"
     );
+    this.setState({ posts });
   }
+
+  handleDelete = (movie) => {
+    console.log(movie.id);
+  };
 
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
-      </div>
+      <Table striped hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.posts.map((property) => (
+            <tr>
+              <td>
+                <Link>{property.title}</Link>
+              </td>
+              <td>{property.type}</td>
+              <td>
+                <Button
+                  onClick={this.handleDelete(property)}
+                  variant="outline-danger"
+                >
+                  Update
+                </Button>
+              </td>
+              <td>
+                <Button onClick={this.handleDelete} variant="outline-danger">
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     );
   }
 }

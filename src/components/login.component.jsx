@@ -6,8 +6,7 @@ import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 import Link from "@material-ui/core/Link";
 
-
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -28,28 +27,29 @@ export default class Login extends Component {
       username: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
-  handleLogin(e) {
+  handleLogin = (e) => {
+    console.log("this.form");
     e.preventDefault();
 
     this.setState({
       message: "",
-      loading: true
+      loading: true,
     });
 
     this.form.validateAll();
@@ -57,10 +57,10 @@ export default class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.history.push("/profile");
+          this.props.history.push("/user");
           window.location.reload();
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -70,16 +70,16 @@ export default class Login extends Component {
 
           this.setState({
             loading: false,
-            message: resMessage
+            message: resMessage,
           });
         }
       );
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
-  }
+  };
 
   render() {
     return (
@@ -93,7 +93,7 @@ export default class Login extends Component {
 
           <Form
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -119,7 +119,9 @@ export default class Login extends Component {
                 onChange={this.onChangePassword}
                 validations={[required]}
               />
-              <Link href="/resetPassword" variant="body2">Forgot password?</Link>
+              <Link href="/resetPassword" variant="body2">
+                Forgot password?
+              </Link>
             </div>
 
             <div className="form-group">
@@ -135,10 +137,10 @@ export default class Login extends Component {
             </div>
 
             <div className="form-group">
-                                <label>Don't hava an account?</label>
-                                <Link href="/register" variant="body2">
-                                     Sign Up
-                                </Link>
+              <label>Don't hava an account?</label>
+              <Link href="/register" variant="body2">
+                Sign Up
+              </Link>
             </div>
 
             {this.state.message && (
@@ -148,12 +150,14 @@ export default class Login extends Component {
                 </div>
               </div>
             )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
+            {
+              <CheckButton
+                style={{ display: "none" }}
+                ref={(c) => {
+                  this.checkBtn = c;
+                }}
+              />
+            }
           </Form>
         </div>
       </div>

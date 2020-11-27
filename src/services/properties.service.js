@@ -9,10 +9,11 @@ class PropertyService {
     return axios.get('http://localhost:8082/property/all');
   }
 
- /* getUserBoard() {
-    return axios.get(API_URL + 'user', { headers: authHeader() });
+  getUserBoard() {
+    return axios.get(API_URL + 'create', { headers: authHeader() });
   }
-
+  
+/*
   getModeratorBoard() {
     return axios.get(API_URL + 'mod', { headers: authHeader() });
   }
