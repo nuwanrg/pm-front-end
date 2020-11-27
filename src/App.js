@@ -13,8 +13,10 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
-import ResetPassword from "./components/ResetPassword"
-import ChangePassword from "./components/ChangePassword"
+import ResetPassword from "./components/resetPassword";
+import ChangePassword from "./components/changePassword";
+import LandingPageComponent from "./components/landingPage/landingpageComponent";
+import NewProperty from "./components/newProperty";
 
 class App extends Component {
   constructor(props) {
@@ -55,7 +57,6 @@ class App extends Component {
           </Link>
 
           <div className="navbar-nav mr-auto">
-
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
@@ -73,6 +74,8 @@ class App extends Component {
                 Rent
               </Link>
             </li>
+
+            {/*}
             <li className="nav-item">
               <Link to={"/properties"} className="nav-link">
                 Apartments
@@ -107,7 +110,7 @@ class App extends Component {
                 More
               </Link>
             </li>
-
+*/}
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -165,7 +168,11 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
+            <Route
+              exact
+              path={["/", "/home"]}
+              component={LandingPageComponent}
+            />
             <Route exact path={["/", "/properties"]} component={Properties} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
@@ -175,7 +182,7 @@ class App extends Component {
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/resetPassword" component={ResetPassword} />
             <Route path="/changePassword/:token" component={ChangePassword} />
-            
+            <Route path="/newProperty" component={NewProperty} />
           </Switch>
         </div>
       </div>
