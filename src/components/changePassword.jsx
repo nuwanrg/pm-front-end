@@ -3,10 +3,10 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
-import AuthService from "../services/auth.service";
+import AuthService from "../services/authService";
 import { useParams } from "react-router";
 
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -16,7 +16,7 @@ const required = value => {
   }
 };
 
-const vpassword = value => {
+const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -35,24 +35,22 @@ export default class ChangePassword extends Component {
 
     this.state = {
       password: "",
-      newPassword:"",
+      newPassword: "",
       successful: false,
       message: "",
-      token:this.props.match.params.token
+      token: this.props.match.params.token,
     };
   }
 
-  
-
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
   onChangeNewPassword(e) {
     this.setState({
-      newPassword: e.target.value
+      newPassword: e.target.value,
     });
   }
 
@@ -86,23 +84,20 @@ export default class ChangePassword extends Component {
 
     this.setState({
       message: "",
-      successful: false
+      successful: false,
     });
 
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.changePassword(
-        this.state.token,
-        this.state.password
-      ).then(
-        response => {
+      AuthService.changePassword(this.state.token, this.state.password).then(
+        (response) => {
           this.setState({
             message: response.data.message,
-            successful: true
+            successful: true,
           });
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -112,7 +107,7 @@ export default class ChangePassword extends Component {
 
           this.setState({
             successful: false,
-            message: resMessage
+            message: resMessage,
           });
         }
       );
@@ -131,13 +126,12 @@ export default class ChangePassword extends Component {
 
           <Form
             onSubmit={this.handleChangePassword}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
             {!this.state.successful && (
               <div>
-
                 <div className="form-group">
                   <label htmlFor="token">Token</label>
                   <Input
@@ -147,8 +141,8 @@ export default class ChangePassword extends Component {
                     value={this.state.token}
                   />
                 </div>
-                
-            <div className="form-group">
+
+                <div className="form-group">
                   <label htmlFor="password">New Password</label>
                   <Input
                     type="password"
@@ -176,11 +170,7 @@ export default class ChangePassword extends Component {
                   <button className="btn btn-primary btn-block">Submit</button>
                 </div>
               </div>
-
-              
-            )
-            
-            }
+            )}
 
             {this.state.message && (
               <div className="form-group">
@@ -198,7 +188,7 @@ export default class ChangePassword extends Component {
             )}
             <CheckButton
               style={{ display: "none" }}
-              ref={c => {
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />

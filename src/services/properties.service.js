@@ -4,7 +4,7 @@ import http from "./httpService";
 import { apiUrl } from "../config.json";
 
 //const PROPERTY_URL = "http://localhost:8082/property/";
-const apiEndpoint = apiUrl + "/properties";
+const apiEndpoint = apiUrl + "/properties/";
 
 class PropertyService {
   getPublicContent() {
@@ -35,21 +35,25 @@ export function deleteProperty(propertyId) {
   return http.delete(propertyUrl(propertyId));
 }
 
-export function getMovies() {
+export function getProperties() {
   return http.get(apiEndpoint);
 }
 
-export function getMovie(movieId) {
-  return http.get(propertyUrl(movieId));
+export function getProperty(propertyId) {
+  return http.get(propertyUrl(propertyId));
 }
 
-export function saveMovie(movie) {
-  if (movie._id) {
-    const body = { ...movie };
-    delete body._id;
-    return http.put(propertyUrl(movie._id), body);
+export function saveProperty(property) {
+  //console.log("saveMovie movie._id: " + movie._id);
+  if (property.id) {
+    console.log("SAVE PROPERTY inif property: " + JSON.stringify(property));
+    const body = { ...property };
+    //delete body.id;
+    return http.put(propertyUrl(property.id), body);
   }
-  return http.post(apiEndpoint, movie);
+  console.log("SAVE PROPERTY OUTif property: " + JSON.stringify(property));
+  console.log("apiEndpoint: " + apiEndpoint);
+  return http.post(apiEndpoint, property);
 }
 
 export function getGenres() {

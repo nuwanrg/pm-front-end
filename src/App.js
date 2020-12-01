@@ -3,8 +3,6 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AuthService from "./services/auth.service";
-
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
@@ -18,6 +16,7 @@ import BoardAdmin from "./components/board-admin.component";
 import ResetPassword from "./components/resetPassword";
 import ChangePassword from "./components/changePassword";
 import LandingPageComponent from "./components/landingPage/landingpageComponent";
+import AuthService from "./services/authService";
 import Axios from "axios";
 
 //Handling unexpected errors globally
@@ -26,20 +25,18 @@ Axios.interceptors.response.use(null, (error) => {
 });
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.logOut = this.logOut.bind(this);
+  logOut = this.logOut.bind(this);
 
-    this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
-      currentUser: undefined,
-    };
-  }
+  state = {
+    currentUser: {
+      username: "",
+    },
+    showModeratorBoard: false,
+    showAdminBoard: false,
+  };
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
     if (user) {
       this.setState({
         currentUser: user,
@@ -184,16 +181,27 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={BoardUser} />
+            <Route
+              path="/user"
+              render={(props) => (
+                <BoardUser {...props} user={this.state.currentUser} />
+              )}
+            />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/resetPassword" component={ResetPassword} />
             <Route path="/changePassword/:token" component={ChangePassword} />
-            <ProtectedRoute path="/properties/:id" component={PropertyForm} />
+            <ProtectedRoute
+              path="/properties/:id"
+              render={(props) => (
+                <PropertyForm {...props} currentUser={this.state.currentUser} />
+              )}
+            />
+
             <Route
               path="/properties"
               render={(props) => (
-                <Properties {...props} user={this.state.user} />
+                <Properties {...props} user={this.state.currentUser} />
               )}
             />
           </Switch>

@@ -1,15 +1,15 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import { getMovie, saveMovie } from "../services/properties.service";
+import { getProperty, saveProperty } from "../services/properties.service";
 import { getGenres } from "../services/fakeGenreService";
 
 class PropertyForm extends Form {
   state = {
     data: {
       title: "",
-      test: "",
-      genreId: "",
+      category: "",
+      username: "",
     },
     genres: [],
     errors: {},
@@ -18,23 +18,31 @@ class PropertyForm extends Form {
   schema = {
     _id: Joi.string(),
     title: Joi.string().required().label("Title"),
-    test: Joi.string().required().label("Test"),
-    genreId: Joi.string().required().label("Genre"),
+    category: Joi.string().required().label("Category"),
+    //username: "",
   };
 
   async populateGenres() {
-    const genres = getGenres();
+    //const genres = getGenres();
+    const genres = [
+      {
+        _id: "5fc0d307b4037d871e264d8c",
+        name: "SELL",
+      },
+    ];
 
     this.setState({ genres });
   }
 
-  async populateMovie() {
+  async populateProperty() {
     try {
-      const movieId = this.props.match.params.id;
-      if (movieId === "new") return;
+      const propertyId = this.props.match.params.id; //match
+      console.log("propertyId: " + propertyId);
+      if (propertyId === "new") return;
 
-      const { data: movie } = await getMovie(movieId);
-      this.setState({ data: this.mapToViewModel(movie) });
+      const { data: property } = await getProperty(propertyId);
+      console.log("populate property: " + JSON.stringify(property));
+      this.setState({ data: this.mapToViewModel(property) });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         this.props.history.replace("/not-found");
@@ -42,34 +50,40 @@ class PropertyForm extends Form {
   }
 
   async componentDidMount() {
+    const user = this.props.currentUser.username;
+    console.log("json " + JSON.stringify(user));
+    this.setState({ data: { username: user } });
+    console.log("json data " + JSON.stringify(this.state.data));
+
     await this.populateGenres();
-    await this.populateMovie();
+    await this.populateProperty();
 
     console.log("testlog genres: " + this.state.genres);
   }
 
-  mapToViewModel(movie) {
+  mapToViewModel(property) {
     return {
-      _id: movie._id,
-      title: movie.title,
-      genreId: movie.genre._id,
+      id: property.id,
+      title: property.title,
     };
   }
 
   doSubmit = async () => {
-    await saveMovie(this.state.data);
+    console.log("json data " + JSON.stringify(this.state.data));
 
-    this.props.history.push("/movies");
+    await saveProperty(this.state.data);
+
+    this.props.history.push("/properties");
   };
 
   render() {
     return (
       <div>
-        <h1>Movie Form</h1>
+        {/* <h1>{this.data.username}</h1> */}
+        <h1>POST NEW PROPERTY</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
-          {this.renderSelect("genreId", "Genre", this.state.genres)}
-          {this.renderInput("test", "Test")}
+          {this.renderSelect("category", "Category", this.state.genres)}
           {this.renderButton("Save")}
         </form>
       </div>

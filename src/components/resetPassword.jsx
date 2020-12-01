@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "../services/auth.service";
+import AuthService from "../services/authService";
 import Link from "@material-ui/core/Link";
 
 const required = (value) => {
@@ -27,10 +27,7 @@ const email = (value) => {
   }
 };
 
-
-
 class ResetPassword extends Component {
-
   constructor(props) {
     super(props);
     this.resetPassword = this.resetPassword.bind(this);
@@ -39,13 +36,13 @@ class ResetPassword extends Component {
     this.state = {
       email: "",
       successful: false,
-      message: ""
+      message: "",
     };
   }
 
   onChangeEmail(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
 
@@ -54,22 +51,20 @@ class ResetPassword extends Component {
 
     this.setState({
       message: "",
-      successful: false
+      successful: false,
     });
 
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.resetPassword(
-        this.state.email
-      ).then(
-        response => {
+      AuthService.resetPassword(this.state.email).then(
+        (response) => {
           this.setState({
             message: response.data.message,
-            successful: true
+            successful: true,
           });
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -79,13 +74,12 @@ class ResetPassword extends Component {
 
           this.setState({
             successful: false,
-            message: resMessage
+            message: resMessage,
           });
         }
       );
     }
   }
-
 
   render() {
     return (
@@ -99,51 +93,51 @@ class ResetPassword extends Component {
 
           <Form
             onSubmit={this.resetPassword}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
             {!this.state.successful && (
               <div>
-            <div className="form-group">
-              <label>Forgot your password?</label>
-              <label>
-                Enter the email that you registered with us and we will send you
-                a link to reset the password.
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="email"
-                value={this.state.email}
-                onChange={this.onChangeEmail}
-                validations={[required, email]}
-              />
-            </div>
+                <div className="form-group">
+                  <label>Forgot your password?</label>
+                  <label>
+                    Enter the email that you registered with us and we will send
+                    you a link to reset the password.
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.onChangeEmail}
+                    validations={[required, email]}
+                  />
+                </div>
 
-            <div className="form-group">
-              <button
-                className="btn btn-primary btn-block"
-                disabled={this.state.loading}
-              >
-                {this.state.loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Submit</span>
-              </button>
-            </div>
+                <div className="form-group">
+                  <button
+                    className="btn btn-primary btn-block"
+                    disabled={this.state.loading}
+                  >
+                    {this.state.loading && (
+                      <span className="spinner-border spinner-border-sm"></span>
+                    )}
+                    <span>Submit</span>
+                  </button>
+                </div>
 
-            <div className="form-group">
-              <label>Need assistance?</label>
-              <Link href="/register" variant="body2">
-                Contact Us
-              </Link>
-            </div>
-            </div>)}
-
+                <div className="form-group">
+                  <label>Need assistance?</label>
+                  <Link href="/register" variant="body2">
+                    Contact Us
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {this.state.message && (
               <div className="form-group">

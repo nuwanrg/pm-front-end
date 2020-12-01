@@ -12,6 +12,11 @@ export default class BoardUser extends Component {
   };
 
   async componentDidMount() {
+    /* const { user } = this.props;
+    console.log("in comp mount: " + user.username); */
+    const { user } = this.props;
+    this.setState({ user });
+
     const { data: properties } = await axios.get(
       "http://localhost:8082/api/properties/"
     );
@@ -44,10 +49,16 @@ export default class BoardUser extends Component {
   };
 
   render() {
+    //props
+    // const { user } = this.props;
+
+    //console.log("in render: " + user);
+
     const count = this.state.properties.length;
     if (count === 0) return <p>There are no properties to list.</p>;
     return (
       <React.Fragment>
+        <h1>{this.props.user.username}</h1>
         <p>Showing {count} properties.</p>
         {
           /* user && */ <Link

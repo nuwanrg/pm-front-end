@@ -1,102 +1,153 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import PropertiesTable from "./propertiesTable";
+import ListGroup from "./common/listGroup";
+import Pagination from "./common/pagination";
+//import { getMovies, deleteMovie } from "../services/movieService";
+import { getProperties, deleteProperty } from "../services/properties.service";
+//import { getGenres } from "../services/genreService";
+import { paginate } from "../utils/paginate";
+import _ from "lodash";
+import SearchBox from "./searchBox";
+import auth from "../services/authService";
 
-import PropertyService from "../services/properties.service";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Form from "react-bootstrap/Form";
-import { Button } from "react-bootstrap";
-import { FormControl } from "react-bootstrap";
+class Movies extends Component {
+  state = {
+    movies: [],
+    genres: [],
+    currentPage: 1,
+    pageSize: 4,
+    searchQuery: "",
+    selectedGenre: null,
+    sortColumn: { path: "title", order: "asc" },
+  };
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
+  async componentDidMount() {
+    //const { data } = await getGenres();
+    const data = [
+      {
+        _id: "5fc0d307b4037d871e264d8c",
+        name: "SELL",
+      },
+    ];
 
-    this.state = {
-      list: [
-        { id: "", title: "Title test", price: "", category: "", errorMsg: "" },
-      ],
-    };
+    const genres = [{ _id: "", name: "All Genres" }, ...data];
+
+    const { data: movies } = await getProperties();
+    this.setState({ movies, genres });
   }
 
-  componentDidMount() {
-    PropertyService.getPublicContent().then(
-      (response) => {
-        this.setState({ list: response.data });
-      }
-      // ,
-      // error => {
-      //   this.setState({
-      //     errorMsg:
-      //       (error.response && error.response.data) ||
-      //       error.message ||
-      //       error.toString()
-      //   });
-      // }
-    );
-  }
+  handleDelete = async (movie) => {
+    const originalMovies = this.state.movies;
+    const movies = originalMovies.filter((m) => m._id !== movie._id);
+    this.setState({ movies });
+
+    try {
+      await deleteProperty(movie._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error("This movie has already been deleted.");
+
+      this.setState({ movies: originalMovies });
+    }
+  };
+
+  handleLike = (movie) => {
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
+  };
+
+  handlePageChange = (page) => {
+    this.setState({ currentPage: page });
+  };
+
+  handleGenreSelect = (genre) => {
+    this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 });
+  };
+
+  handleSearch = (query) => {
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
+  };
+
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
+  };
+
+  getPagedData = () => {
+    const {
+      pageSize,
+      currentPage,
+      sortColumn,
+      selectedGenre,
+      searchQuery,
+      movies: allMovies,
+    } = this.state;
+
+    let filtered = allMovies;
+    if (searchQuery)
+      filtered = allMovies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    else if (selectedGenre && selectedGenre._id)
+      filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const movies = paginate(sorted, currentPage, pageSize);
+
+    return { totalCount: filtered.length, data: movies };
+  };
 
   render() {
+    const { length: count } = this.state.movies;
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+    const user = auth.getCurrentUser();
+    //const { user } = this.props;
+
+    const { totalCount, data: movies } = this.getPagedData();
+
     return (
-      <div className="container">
-        <div className="container">
-          <Breadcrumb>
-            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-              Library
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>Data</Breadcrumb.Item>
-          </Breadcrumb>
+      <div className="row">
+        <div className="col-3">
+          <ListGroup
+            items={this.state.genres}
+            selectedItem={this.state.selectedGenre}
+            onItemSelect={this.handleGenreSelect}
+          />
         </div>
-
-        <div className="container">
-          <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">
-                    Separated link
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </Nav>
-              <Form inline>
-                <FormControl
-                  type="text"
-                  placeholder="Search"
-                  className="mr-sm-2"
-                />
-                <FormControl
-                  type="text"
-                  placeholder=" another Search"
-                  className="mr-sm-2"
-                />
-                <Button variant="outline-success">Search</Button>
-              </Form>
-            </Navbar.Collapse>
-          </Navbar>
-        </div>
-
-        <div className="container">
-          <ul>
-            {this.state.list.map((item) => (
-              <li key={item.id}>{item.title}</li>
-            ))}
-          </ul>
+        <div className="col">
+          {user && (
+            <Link
+              to="/properties/new"
+              className="btn btn-primary"
+              style={{ marginBottom: 20 }}
+            >
+              New Movie
+            </Link>
+          )}
+          <p>Showing {totalCount} movies in the database.</p>
+          <SearchBox value={searchQuery} onChange={this.handleSearch} />
+          <PropertiesTable
+            movies={movies}
+            sortColumn={sortColumn}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+            onSort={this.handleSort}
+          />
+          <Pagination
+            itemsCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
         </div>
       </div>
     );
   }
 }
+
+export default Movies;
