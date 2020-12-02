@@ -10,7 +10,7 @@ import Properties from "./components/home.properties.component";
 import PropertyForm from "./components/propertyForm";
 import ProtectedRoute from "./components/common/protectedRoute";
 import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
+import User from "./components/user";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import ResetPassword from "./components/resetPassword";
@@ -184,7 +184,7 @@ class App extends Component {
             <Route
               path="/user"
               render={(props) => (
-                <BoardUser {...props} user={this.state.currentUser} />
+                <User {...props} user={this.state.currentUser} />
               )}
             />
             <Route path="/mod" component={BoardModerator} />

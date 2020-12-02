@@ -84,6 +84,27 @@ class PropertyForm extends Form {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
           {this.renderSelect("category", "Category", this.state.genres)}
+          <div className="form-group multi-preview">
+            {(this.fileArray || []).map((url) => (
+              <img src={url} alt="..." />
+            ))}
+          </div>
+
+          <div className="form-group">
+            <input
+              type="file"
+              className="form-control"
+              onChange={this.uploadMultipleFiles}
+              multiple
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn-danger btn-block"
+            onClick={this.uploadFiles}
+          >
+            Upload
+          </button>
           {this.renderButton("Save")}
         </form>
       </div>

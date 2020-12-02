@@ -9,8 +9,8 @@ class PropertiesTable extends Component {
     {
       path: "title",
       label: "Title",
-      content: (movie) => (
-        <Link to={`/properties/${movie.id}`}>{movie.title}</Link>
+      content: (property) => (
+        <Link to={`/properties/${property.id}`}>{property.title}</Link>
       ),
     },
     { path: "genre.name", label: "Genre" },
@@ -26,9 +26,9 @@ class PropertiesTable extends Component {
 
   deleteColumn = {
     key: "delete",
-    content: (movie) => (
+    content: (property) => (
       <button
-        onClick={() => this.props.onDelete(movie)}
+        onClick={() => this.props.onDelete(property)}
         className="btn btn-danger btn-sm"
       >
         Delete
@@ -44,12 +44,12 @@ class PropertiesTable extends Component {
   }
 
   render() {
-    const { movies, onSort, sortColumn } = this.props;
+    const { properties, onSort, sortColumn } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        data={movies}
+        data={properties}
         sortColumn={sortColumn}
         onSort={onSort}
       />

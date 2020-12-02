@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import PropertiesTable from "./propertiesTable";
-import ListGroup from "./common/listGroup";
+//import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
+import ListGroup from "react-bootstrap/ListGroup";
 //import { getMovies, deleteMovie } from "../services/movieService";
 import { getProperties, deleteProperty } from "../services/properties.service";
 //import { getGenres } from "../services/genreService";
@@ -14,7 +15,7 @@ import _ from "lodash";
 import SearchBox from "./searchBox";
 import auth from "../services/authService";
 
-class Properties extends Component {
+class User extends Component {
   state = {
     properties: [],
     genres: [],
@@ -115,8 +116,12 @@ class Properties extends Component {
     return (
       <div>
         <div>
-          <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-            <Tab eventKey="ads" title="My Ads">
+          <Tabs defaultActiveKey="ads" id="uncontrolled-tab-example">
+            <Tab
+              eventKey="ads"
+              title="My Ads"
+              className="block-example border border-dark"
+            >
               <div className="row">
                 {/*         <div className="col-3">
           <ListGroup
@@ -137,6 +142,12 @@ class Properties extends Component {
                   )}
                   <p>Showing {totalCount} properties in the database.</p>
                   <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                  {properties.map((property) => (
+                    <ListGroup className="my-2" key={property.id}>
+                      <ListGroup.Item>{property.title}</ListGroup.Item>
+                    </ListGroup>
+                  ))}
+
                   <PropertiesTable
                     properties={properties}
                     sortColumn={sortColumn}
@@ -153,10 +164,18 @@ class Properties extends Component {
                 </div>
               </div>
             </Tab>
-            <Tab eventKey="profile" title="My Profile">
+            <Tab
+              eventKey="profile"
+              title="My Profile"
+              className="block-example border border-dark"
+            >
               <h1 />
             </Tab>
-            <Tab eventKey="contact" title="Inquiries">
+            <Tab
+              eventKey="contact"
+              title="Inquiries"
+              className="block-example border border-dark"
+            >
               <h1 />
             </Tab>
           </Tabs>
@@ -166,4 +185,4 @@ class Properties extends Component {
   }
 }
 
-export default Properties;
+export default User;
