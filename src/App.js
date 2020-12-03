@@ -11,6 +11,8 @@ import PropertyForm from "./components/propertyForm";
 import ProtectedRoute from "./components/common/protectedRoute";
 import Profile from "./components/profile.component";
 import User from "./components/user";
+import Buy from "./components/buy";
+import Rent from "./components/rent";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import ResetPassword from "./components/resetPassword";
@@ -68,13 +70,13 @@ class App extends Component {
             </li>
 
             <li className="nav-item">
-              <Link to={"/properties"} className="nav-link">
+              <Link to={"/buy"} className="nav-link">
                 Buy
               </Link>
             </li>
 
             <li className="nav-item">
-              <Link to={"/properties"} className="nav-link">
+              <Link to={"/rent"} className="nav-link">
                 Rent
               </Link>
             </li>
@@ -180,6 +182,8 @@ class App extends Component {
             <Route exact path={["/", "/properties"]} component={Properties} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/buy" component={Buy} />
+            <Route exact path="/rent" component={Rent} />
             <Route exact path="/profile" component={Profile} />
             <Route
               path="/user"

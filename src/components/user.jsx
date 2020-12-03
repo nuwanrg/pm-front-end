@@ -1,8 +1,12 @@
 import React, { Component } from "react";
+import "../App.css";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Carousel from "react-bootstrap/Carousel";
 import PropertiesTable from "./propertiesTable";
 //import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
@@ -144,7 +148,43 @@ class User extends Component {
                   <SearchBox value={searchQuery} onChange={this.handleSearch} />
                   {properties.map((property) => (
                     <ListGroup className="my-2" key={property.id}>
-                      <ListGroup.Item>{property.title}</ListGroup.Item>
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>
+                            <Carousel className="slider-container">
+                              <Carousel.Item className="slider-item-div">
+                                <img
+                                  className="d-block w-10"
+                                  src="download (1).jpg"
+                                  alt="First slide"
+                                />
+                                {/*                                 <Carousel.Caption>
+                                  <h3>First slide label</h3>
+                                  <p>
+                                    Nulla vitae elit libero, a pharetra augue
+                                    mollis interdum.
+                                  </p>
+                                </Carousel.Caption> */}
+                              </Carousel.Item>
+                              <Carousel.Item className="slider-item-div">
+                                <img
+                                  className="d-block w-10"
+                                  src="download.jpg"
+                                  alt="First slide"
+                                />
+                                {/*                                 <Carousel.Caption>
+                                  <h3>First slide label</h3>
+                                  <p>
+                                    Nulla vitae elit libero, a pharetra augue
+                                    mollis interdum.
+                                  </p>
+                                </Carousel.Caption> */}
+                              </Carousel.Item>
+                            </Carousel>
+                          </Col>
+                          <Col>{property.title}</Col>
+                        </Row>
+                      </ListGroup.Item>
                     </ListGroup>
                   ))}
 
