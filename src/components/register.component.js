@@ -1,11 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton";
 import { isEmail } from "validator";
 import Link from "@material-ui/core/Link";
+import { signup } from "../services/authService";
+import "../App.css";
 
-import AuthService from "../services/authService";
+//import AuthService from "../services/authService";
 
 const required = (value) => {
   if (!value) {
@@ -47,48 +52,85 @@ const vpassword = (value) => {
   }
 };
 
+const ToggleButtonExample = (val) => {
+  const [value, setValue] = useState([1, 2]);
+
+  /*
+   * The second argument that will be passed to
+   * `handleChange` from `ToggleButtonGroup`
+   * is the SyntheticEvent object, but we are
+   * not using it in this example so we will omit it.
+   */
+  const handleChange = (val) => setValue(val);
+
+  return (
+    <ToggleButtonGroup type="checkbox" value={value} onChange={handleChange}>
+      <ToggleButton
+        id="ROLE_USER"
+        key="buy"
+        variant="outline-success"
+        value="buy"
+        checked={value}
+      >
+        Buy Properties
+      </ToggleButton>
+      <ToggleButton
+        key="sell"
+        id="ROLE_AGENT"
+        variant="outline-success"
+        value="sell"
+        checked={value}
+      >
+        Sell Properties
+      </ToggleButton>
+    </ToggleButtonGroup>
+  );
+};
+
 export default class Register extends Component {
-  constructor(props) {
-    super(props);
+  /*constructor(props) {
+     super(props);
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
+    this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this); */
 
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      successful: false,
-      message: "",
-    };
-  }
+  state = {
+    username: "",
+    email: "",
+    password: "",
+    roles: ["ROLE_USER"],
+    successful: false,
+    message: "",
+    response: "",
+  };
+  //}
 
-  onChangeUsername(e) {
+  onChangeUsername = (e) => {
     this.setState({
       username: e.target.value,
     });
-  }
+  };
 
-  onChangeEmail(e) {
+  onChangeEmail = (e) => {
     this.setState({
       email: e.target.value,
     });
-  }
+  };
 
-  onChangePassword(e) {
+  onChangePassword = (e) => {
     this.setState({
       password: e.target.value,
     });
-  }
-  onChangeConfirmPassword(e) {
+  };
+  onChangeConfirmPassword = (e) => {
     this.setState({
       confirmPassword: e.target.value,
     });
-  }
+  };
 
-  handleRegister(e) {
+  handleRegister = async (e) => {
     e.preventDefault();
 
     this.setState({
@@ -99,11 +141,24 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-        this.state.username,
-        this.state.email,
-        this.state.password
-      ).then(
+      console.log(this.state);
+      try {
+        const res = await signup(this.state);
+        console.log("Register response: test");
+        this.setState({ response: res.data });
+        console.log(
+          "Register response: " + JSON.stringify(this.state.response)
+        );
+      } catch (ex) {
+        //Expected errors
+        if (ex.response && ex.response.status === 409) {
+          alert("This Property has already been deleted!");
+        } else {
+          //Unexpected errors
+          alert("Something failed while deleting a Property!");
+        }
+      }
+      /*       .then(
         (response) => {
           this.setState({
             message: response.data.message,
@@ -123,9 +178,9 @@ export default class Register extends Component {
             message: resMessage,
           });
         }
-      );
+      ); */
     }
-  }
+  };
 
   render() {
     return (
@@ -191,7 +246,9 @@ export default class Register extends Component {
                     validations={[required, vpassword]}
                   />
                 </div>
-
+                <div className="form-group">
+                  <ToggleButtonExample />
+                </div>
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>
                 </div>

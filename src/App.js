@@ -22,9 +22,9 @@ import AuthService from "./services/authService";
 import Axios from "axios";
 
 //Handling unexpected errors globally
-Axios.interceptors.response.use(null, (error) => {
+/* Axios.interceptors.response.use(null, (error) => {
   console.log("INTERCEPTOR CALLED");
-});
+}); */
 
 class App extends Component {
   logOut = this.logOut.bind(this);
