@@ -7,10 +7,10 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { isEmail } from "validator";
 import Link from "@material-ui/core/Link";
-import { signup } from "../services/authService";
+//import { register } from "../services/authService";
 import "../App.css";
 
-//import AuthService from "../services/authService";
+import AuthService from "../services/authService";
 
 const required = (value) => {
   if (!value) {
@@ -141,9 +141,13 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
-      console.log(this.state);
+      //console.log(this.state);
       try {
-        const res = await signup(this.state);
+        const res = await AuthService.register(
+          this.state.username,
+          this.state.email,
+          this.state.password
+        );
         console.log("Register response: test");
         this.setState({ response: res.data });
         console.log(
@@ -151,11 +155,16 @@ export default class Register extends Component {
         );
       } catch (ex) {
         //Expected errors
-        if (ex.response && ex.response.status === 409) {
-          alert("This Property has already been deleted!");
+        if (ex.response && ex.response.status === 400) {
+          console.log(ex.response.data.message);
+          this.setState({
+            successful: false,
+            message: ex.response.data.message,
+          });
+          //alert("This Property has already been deleted!");
         } else {
           //Unexpected errors
-          alert("Something failed while deleting a Property!");
+          alert("Server Error!");
         }
       }
       /*       .then(

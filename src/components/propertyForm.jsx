@@ -73,7 +73,7 @@ class PropertyForm extends Form {
 
     await saveProperty(this.state.data);
 
-    this.props.history.push("/properties");
+    this.props.history.push("/user");
   };
 
   render() {

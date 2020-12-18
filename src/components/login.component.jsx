@@ -44,7 +44,6 @@ export default class Login extends Component {
   }
 
   handleLogin = (e) => {
-    console.log("this.form");
     e.preventDefault();
 
     this.setState({
@@ -57,10 +56,13 @@ export default class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.history.push("/user");
+          console.log("Props");
+          console.log(this.props);
+          this.props.history.push("/");
           window.location.reload();
         },
         (error) => {
+          console.log(error);
           const resMessage =
             (error.response &&
               error.response.data &&

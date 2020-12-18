@@ -10,6 +10,7 @@ import Properties from "./components/home.properties.component";
 import PropertyForm from "./components/propertyForm";
 import ProtectedRoute from "./components/common/protectedRoute";
 import Profile from "./components/profile.component";
+import Account from "./components/accoutSettings";
 import User from "./components/user";
 import Buy from "./components/buy";
 import Rent from "./components/rent";
@@ -19,6 +20,8 @@ import ResetPassword from "./components/resetPassword";
 import ChangePassword from "./components/changePassword";
 import LandingPageComponent from "./components/landingPage/landingpageComponent";
 import AuthService from "./services/authService";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import FooterComponent from "./components/commonComponents/footerComponent/footer";
 import Axios from "axios";
 
 //Handling unexpected errors globally
@@ -27,12 +30,15 @@ import Axios from "axios";
 }); */
 
 class App extends Component {
-  logOut = this.logOut.bind(this);
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
+  }
+
+  //logOut = this.logOut.bind(this);
 
   state = {
-    currentUser: {
-      username: "",
-    },
+    currentUser: undefined,
     showModeratorBoard: false,
     showAdminBoard: false,
   };
@@ -50,6 +56,7 @@ class App extends Component {
 
   logOut() {
     AuthService.logout();
+    console.log(this.props);
   }
 
   render() {
@@ -133,27 +140,56 @@ class App extends Component {
               </li>
             )}
 
-            {currentUser && (
+            {/*             {currentUser && (
               <li className="nav-item">
                 <Link to={"/user"} className="nav-link">
-                  User
+                  My Profile
                 </Link>
               </li>
-            )}
+            )} */}
           </div>
 
           {currentUser ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
+                <NavDropdown title="My Account" id="nav-dropdown">
+                  <NavDropdown.Item href="/user" eventKey="dashboard">
+                    Dashboard
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#" eventKey="dashboard">
+                    Inquiries
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#" eventKey="dashboard">
+                    Saved Searches
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/#" eventKey="dashboard">
+                    Saved Properties
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/account" eventKey="4.1">
+                    Account Settings
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    href="/login"
+                    eventKey="4.4"
+                    onClick={this.logOut}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#" eventKey="dashboard">
+                    Contact Us
+                  </NavDropdown.Item>
+                </NavDropdown>
+                {/*       
                 <Link to={"/profile"} className="nav-link">
                   {currentUser.username}
-                </Link>
+                </Link> */}
               </li>
-              <li className="nav-item">
+              {/*               <li className="nav-item">
                 <a href="/login" className="nav-link" onClick={this.logOut}>
                   LogOut
                 </a>
-              </li>
+              </li> */}
             </div>
           ) : (
             <div className="navbar-nav ml-auto">
@@ -172,7 +208,7 @@ class App extends Component {
           )}
         </nav>
 
-        <div className="container mt-3">
+        <div className="container mt-1">
           <Switch>
             <Route
               exact
@@ -208,8 +244,10 @@ class App extends Component {
                 <Properties {...props} user={this.state.currentUser} />
               )}
             />
+            <Route path="/account" component={Account} />
           </Switch>
         </div>
+        <FooterComponent />
       </div>
     );
   }

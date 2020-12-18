@@ -7,6 +7,14 @@ import Tab from "react-bootstrap/Tab";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
+import Button from "@material-ui/core/Button";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Popper from "@material-ui/core/Popper";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import { makeStyles } from "@material-ui/core/styles";
 import PropertiesTable from "./propertiesTable";
 //import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
@@ -18,8 +26,18 @@ import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
 import auth from "../services/authService";
+import { SidebarData } from "./sidebarData";
 
 class User extends Component {
+  useStyles = makeStyles((theme) => ({
+    root: {
+      display: "flex",
+    },
+    paper: {
+      marginRight: theme.spacing(1),
+    },
+  }));
+
   state = {
     properties: [],
     genres: [],
@@ -110,6 +128,7 @@ class User extends Component {
   };
 
   render() {
+    //const classes = useStyles();
     const { length: count } = this.state.properties;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const user = auth.getCurrentUser();
@@ -120,105 +139,77 @@ class User extends Component {
     return (
       <div>
         <div>
-          <Tabs defaultActiveKey="ads" id="uncontrolled-tab-example">
-            <Tab
-              eventKey="ads"
-              title="My Ads"
-              className="block-example border border-dark"
-            >
-              <div className="row">
-                {/*         <div className="col-3">
-          <ListGroup
-            items={this.state.genres}
-            selectedItem={this.state.selectedGenre}
-            onItemSelect={this.handleGenreSelect}
-          />
-        </div> */}
-                <div className="col">
-                  {user && (
-                    <Link
-                      to="/properties/new"
-                      className="btn btn-primary"
-                      style={{ marginBottom: 20 }}
-                    >
-                      New Property
-                    </Link>
-                  )}
-                  <p>Showing {totalCount} properties in the database.</p>
-                  <SearchBox value={searchQuery} onChange={this.handleSearch} />
-                  {properties.map((property) => (
-                    <ListGroup className="my-2" key={property.id}>
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>
-                            <Carousel className="slider-container">
-                              <Carousel.Item className="slider-item-div">
-                                <img
-                                  className="d-block w-10"
-                                  src="download (1).jpg"
-                                  alt="First slide"
-                                />
-                                {/*                                 <Carousel.Caption>
-                                  <h3>First slide label</h3>
-                                  <p>
-                                    Nulla vitae elit libero, a pharetra augue
-                                    mollis interdum.
-                                  </p>
-                                </Carousel.Caption> */}
-                              </Carousel.Item>
-                              <Carousel.Item className="slider-item-div">
-                                <img
-                                  className="d-block w-10"
-                                  src="download.jpg"
-                                  alt="First slide"
-                                />
-                                {/*                                 <Carousel.Caption>
-                                  <h3>First slide label</h3>
-                                  <p>
-                                    Nulla vitae elit libero, a pharetra augue
-                                    mollis interdum.
-                                  </p>
-                                </Carousel.Caption> */}
-                              </Carousel.Item>
-                            </Carousel>
-                          </Col>
-                          <Col>{property.title}</Col>
-                        </Row>
-                      </ListGroup.Item>
-                    </ListGroup>
-                  ))}
+          <div className="row">
+            <div className="col">
+              {user && (
+                <Link
+                  to="/properties/new"
+                  className="btn btn-primary"
+                  style={{ marginBottom: "2px" }}
+                >
+                  New Property
+                </Link>
+              )}
 
-                  <PropertiesTable
-                    properties={properties}
-                    sortColumn={sortColumn}
-                    onLike={this.handleLike}
-                    onDelete={this.handleDelete}
-                    onSort={this.handleSort}
-                  />
-                  <Pagination
-                    itemsCount={totalCount}
-                    pageSize={pageSize}
-                    currentPage={currentPage}
-                    onPageChange={this.handlePageChange}
-                  />
-                </div>
-              </div>
-            </Tab>
-            <Tab
-              eventKey="profile"
-              title="My Profile"
-              className="block-example border border-dark"
-            >
-              <h1 />
-            </Tab>
-            <Tab
-              eventKey="contact"
-              title="Inquiries"
-              className="block-example border border-dark"
-            >
-              <h1 />
-            </Tab>
-          </Tabs>
+              <SearchBox value={searchQuery} onChange={this.handleSearch} />
+              <p>Showing {totalCount} properties in the database.</p>
+              {properties.map((property) => (
+                <ListGroup className="my-2" key={property.id}>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <Carousel className="slider-container">
+                          <Carousel.Item className="slider-item-div">
+                            <img
+                              className="d-block w-10"
+                              src="download (1).jpg"
+                              alt="First slide"
+                            />
+                            {/*                                 <Carousel.Caption>
+                                  <h3>First slide label</h3>
+                                  <p>
+                                    Nulla vitae elit libero, a pharetra augue
+                                    mollis interdum.
+                                  </p>
+                                </Carousel.Caption> */}
+                          </Carousel.Item>
+                          <Carousel.Item className="slider-item-div">
+                            <img
+                              className="d-block w-10"
+                              src="download.jpg"
+                              alt="First slide"
+                            />
+                            {/*                                 <Carousel.Caption>
+                                  <h3>First slide label</h3>
+                                  <p>
+                                    Nulla vitae elit libero, a pharetra augue
+                                    mollis interdum.
+                                  </p>
+                                </Carousel.Caption> */}
+                          </Carousel.Item>
+                        </Carousel>
+                      </Col>
+                      <Col>{property.title}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                </ListGroup>
+              ))}
+
+              {/*               <PropertiesTable
+                properties={properties}
+                sortColumn={sortColumn}
+                onLike={this.handleLike}
+                onDelete={this.handleDelete}
+                onSort={this.handleSort}
+              /> */}
+              <Pagination
+                itemsCount={totalCount}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={this.handlePageChange}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );

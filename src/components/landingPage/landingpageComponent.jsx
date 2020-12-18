@@ -3,11 +3,10 @@ import React from "react";
 import CarouselComponent from "./carouselComponent/carouselComponent";
 import CardGroupComponent from "./cardGroupComponent/cardgroupComponent";
 import { Col, Container, Row } from "react-bootstrap";
-import FooterComponent from "../commonComponents/footerComponent/footer";
 
 function LandingPageComponent() {
   return (
-    <div className="LandingPageComponent">
+    <div>
       <CarouselComponent />
 
       <Container>
@@ -21,7 +20,7 @@ function LandingPageComponent() {
         </Row>
       </Container>
 
-      <FooterComponent />
+      
     </div>
   );
 }

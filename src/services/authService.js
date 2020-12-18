@@ -3,49 +3,42 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/auth/";
 
 class AuthService {
-  /*   login(username, password) {
-    return axios
-      .post(API_URL + "signin", {
-        username,
-        password,
-      })
-
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
-        return response.data;
-      });
-  } */
-
   async login(username, password) {
-    const { data: response } = await axios.post(API_URL + "signin", {
+    const promise = await axios.post(API_URL + "signin", {
       username,
       password,
     });
+    localStorage.setItem("user", JSON.stringify(promise.data));
+    const { data: user } = promise;
 
-    console.log(response);
+    console.log("user");
+    console.log(user.username);
+    return user;
 
-    if (response & response.accessToken) {
-      localStorage.setItem("user", JSON.stringify(response));
-    }
+    /*.then((response) => {
+        if (response.data.accessToken) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
 
-    return response;
+        return response.data;
+      });*/
   }
 
   logout() {
     localStorage.removeItem("user");
   }
 
-  logout() {
-    localStorage.removeItem("user");
-  }
-
-  register(signupdata) {
-    console.log("In Authservice : " + signupdata);
-    return axios.post(API_URL + "signup", {
-      signupdata,
+  async register(username, email, password) {
+    console.log(username);
+    console.log(email);
+    console.log(password);
+    const promise = await axios.post(API_URL + "signup", {
+      username,
+      email,
+      password,
     });
+    console.log("promise");
+    console.log(promise);
   }
 
   resetPassword(email) {
@@ -64,11 +57,6 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
   }
-}
-
-export function signup(signupdata) {
-  console.log("In Authservice : " + signupdata);
-  return axios.post(API_URL + "signup", signupdata);
 }
 
 export default new AuthService();

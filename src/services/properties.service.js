@@ -58,7 +58,7 @@ export function saveProperty(property) {
 
 export function getGenres() {
   //let testarray = [{ id: 1, name: "Buy" }];
-  return { _id: "5fc0d330b4037d871e264d8d", name: "Drama" };
+  return { id: "5fc0d330b4037d871e264d8d", name: "Drama" };
   //return http.get(apiUrl + "/genres");
 }
 export default new PropertyService();
