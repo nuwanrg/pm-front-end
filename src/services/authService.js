@@ -1,3 +1,5 @@
+/** @format */
+
 import axios from "axios";
 
 const API_URL = "http://localhost:8080/auth/";
@@ -28,14 +30,17 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  async register(username, email, password) {
+  async register(username, email, password, userType) {
     console.log(username);
     console.log(email);
     console.log(password);
+    console.log(userType); //newly
+
     const promise = await axios.post(API_URL + "signup", {
       username,
       email,
       password,
+      userType, //newly
     });
     console.log("promise");
     console.log(promise);
